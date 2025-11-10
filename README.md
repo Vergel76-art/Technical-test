@@ -1,73 +1,74 @@
-# React + TypeScript + Vite
+# Patient Management Dashboard (React + TypeScript + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple telehealth patient management UI built with React, TypeScript, and Vite. It demonstrates per‑patient video session actions using Apollo Client with mocked GraphQL responses.
 
-Currently, two official plugins are available:
+Repository: https://github.com/Vergel76-art/Technical-test.git
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Requirements
 
-## React Compiler
+- Node.js 18+ (recommended: Node 20 LTS)
+- npm 9+
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Quick Start
 
-## Expanding the ESLint configuration
+1) Clone the repo
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+   ```bash
+   git clone https://github.com/Vergel76-art/Technical-test.git
+   cd Technical-test
+   ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+2) Install dependencies
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+   ```bash
+   npm install
+   ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+3) Run the dev server
+
+   ```bash
+   npm run dev
+   ```
+
+   Vite will print the local URL (e.g. http://localhost:5173/). If that port is busy, it will choose another (e.g. http://localhost:5174/). Open the printed URL in your browser.
+
+## Available Scripts
+
+- `npm run dev` — start Vite dev server with HMR
+- `npm run build` — type‑check and build the production bundle into `dist/`
+- `npm run preview` — preview the built app locally from `dist/`
+- `npm run lint` — run ESLint on the project
+
+## GraphQL and Mocks
+
+This app uses Apollo Client’s `MockedProvider` for development; no backend is required.
+
+- Provider setup: `src/main.tsx`
+- Mocks: `src/mocks.ts` (includes Login and CreateConsultationSession responses)
+- Operations: `src/graphql/queries.ts`
+
+Per‑row “Start Video” buttons in the patient table call the `CREATE_CONSULTATION_SESSION` mutation with an `appointmentId` derived from the patient’s id (e.g. `appt-1`). Mocks are duplicated to support StrictMode and repeated clicks.
+
+## UI Overview
+
+- Top Actions bar: “Secure Login” button
+- Patient table: an “Actions” column with a per‑row “Start Video” button; clicking it shows a small status message within the row
+
+## Build & Deploy
+
+```bash
+npm run build
+npm run preview
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The production build is emitted to `dist/` and can be served by any static host (e.g., Nginx, Vercel, Netlify).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Troubleshooting
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Port already in use: Vite will automatically choose a different port; use the printed URL.
+- Windows line endings: the repo is configured with `core.autocrlf=true` for compatibility.
+- Apollo typings: mutations are strongly typed using generics in `useMutation`; if adding new ops, follow the existing pattern in `ActionsBar.tsx` and `PatientRow.tsx`.
+
+## License
+
+MIT (or your chosen license)
